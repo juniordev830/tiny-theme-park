@@ -12,6 +12,7 @@
 - O tempo de simulação avança um minuto a cada oito segundos.
 - Visitantes e receitas aumentam de acordo com o número de atrações.
 - Clique em **Construir atração** ou pressione **B** para expandir quando houver saldo.
+- Pressione **M** ou clique em **Iniciar marketing** para promover o parque por cinco minutos simulados.
 - O painel mostra moedas, visitantes, satisfação e custo de expansão.
 
 ## Testes do núcleo sem Unity
@@ -30,3 +31,10 @@ O workflow do GitHub Actions roda este teste de regras de economia. Ele **não**
 
 ## Limites
 Protótipo sem sistema de salvamento, mapa editável, navegação por caminhos, física detalhada, modelos finais, UI moderna ou build para distribuição. A cena é gerada em tempo de execução; a aparência precisa ser verificada no editor Unity antes de um release.
+
+
+## Campanhas de marketing (novo)
+
+Quando há moedas suficientes e nenhuma campanha ativa, é possível comprar uma promoção. O custo cresce com o número de atrações (`45 + 10 × atrações` moedas), e o efeito dura **cinco minutos simulados**. Durante esse período, cada minuto recebe quatro visitantes adicionais (até o limite de capacidade atual) e um bônus de satisfação. Uma campanha ativa não pode ser comprada novamente até expirar.
+
+O núcleo `ParkEconomy.cs` permanece independente da Unity e possui testes sobre cobrança única, expiração, aumento de visitantes, felicidade e rejeição de compras sem saldo. O painel informa o custo ou o tempo restante. A execução visual da Unity ainda precisa de validação no editor para lançamento.
