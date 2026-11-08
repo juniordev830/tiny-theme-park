@@ -24,4 +24,23 @@ try
     throw new Exception("Negative initial funds were accepted.");
 }
 catch (ArgumentOutOfRangeException) { }
-Console.WriteLine("All 13 park economy checks passed.");
+var baseline = new ParkEconomy(300, 2);
+var promoted = new ParkEconomy(300, 2);
+Check(promoted.MarketingCost == 65, "marketing price scales with attractions");
+Check(promoted.TryLaunchCampaign(), "campaign can be purchased");
+Check(promoted.Coins == 235, "campaign charges coins once");
+Check(promoted.CampaignMinutesRemaining == 5, "campaign lasts five simulated minutes");
+Check(!promoted.TryLaunchCampaign(), "active campaign cannot be purchased twice");
+for (var i = 0; i < 5; i++)
+{
+    baseline.SimulateMinute();
+    promoted.SimulateMinute();
+}
+Check(promoted.CampaignMinutesRemaining == 0, "campaign expires on fifth minute");
+Check(promoted.Visitors > baseline.Visitors, "advertising increases arrivals");
+Check(promoted.Happiness > baseline.Happiness, "campaign improves satisfaction");
+Check(promoted.TryLaunchCampaign(), "expired campaign can be purchased again");
+var poor = new ParkEconomy(10, 1);
+Check(!poor.TryLaunchCampaign(), "cannot spend more coins than available");
+Check(poor.Coins == 10 && poor.CampaignMinutesRemaining == 0, "failed purchase does not change state");
+Console.WriteLine("Park economy checks passed, including marketing campaign lifecycle.");
