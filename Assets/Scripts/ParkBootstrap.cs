@@ -135,9 +135,20 @@ namespace TinyThemePark
             notice = "Nova atracao inaugurada!";
         }
 
+        private void TryLaunchMarketing()
+        {
+            if (economy.TryLaunchCampaign())
+                notice = "Campanha ativada por cinco minutos de jogo!";
+            else if (economy.CampaignMinutesRemaining > 0)
+                notice = "Ja existe uma campanha em andamento.";
+            else
+                notice = "Moedas insuficientes para marketing.";
+        }
+
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.B)) TryAddAttraction();
+            if (Input.GetKeyDown(KeyCode.M)) TryLaunchMarketing();
             simulationClock += Time.deltaTime;
             if (simulationClock >= 8f)
             {
@@ -160,14 +171,18 @@ namespace TinyThemePark
         private void OnGUI()
         {
             if (economy == null) return;
-            GUI.Box(new Rect(16,16,342,216),"TINY THEME PARK — MVP");
+            GUI.Box(new Rect(16,16,342,282),"TINY THEME PARK — MVP");
             GUI.Label(new Rect(34,49,310,25),"Moedas: " + economy.Coins);
             GUI.Label(new Rect(34,76,310,25),"Visitantes: " + economy.Visitors);
             GUI.Label(new Rect(34,103,310,25),"Atracoes: " + economy.Attractions);
             GUI.Label(new Rect(34,130,310,25),"Satisfacao: " + economy.Happiness + "%");
             GUI.Label(new Rect(34,158,310,25),"Nova atracao: " + economy.BuildCost + " moedas");
-            if (GUI.Button(new Rect(34,184,300,32),"CONSTRUIR ATRACAO (B)")) TryAddAttraction();
-            GUI.Box(new Rect(16,244,342,48),notice);
+            GUI.Label(new Rect(34,184,310,25), economy.CampaignMinutesRemaining > 0
+                ? "Campanha ativa: " + economy.CampaignMinutesRemaining + " min"
+                : "Marketing: " + economy.MarketingCost + " moedas");
+            if (GUI.Button(new Rect(34,210,300,32),"CONSTRUIR ATRACAO (B)")) TryAddAttraction();
+            if (GUI.Button(new Rect(34,248,300,32),"INICIAR MARKETING (M)")) TryLaunchMarketing();
+            GUI.Box(new Rect(16,306,342,48),notice);
         }
     }
 }
