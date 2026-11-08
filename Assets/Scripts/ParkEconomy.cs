@@ -10,6 +10,8 @@ namespace TinyThemePark
         public int Visitors { get; private set; }
         public int Happiness { get; private set; }
         public int MinutesElapsed { get; private set; }
+        public int CampaignMinutesRemaining { get; private set; }
+        public int MarketingCost { get { return 45 + Attractions * 10; } }
 
         public int BuildCost { get { return 100 + Attractions * 30; } }
 
@@ -22,6 +24,7 @@ namespace TinyThemePark
             Visitors = 0;
             Happiness = 70;
             MinutesElapsed = 0;
+            CampaignMinutesRemaining = 0;
         }
 
         public bool TryBuildRide()
@@ -33,14 +36,25 @@ namespace TinyThemePark
             return true;
         }
 
+        /// <summary>Runs a five-minute in-game marketing campaign if affordable.</summary>
+        public bool TryLaunchCampaign()
+        {
+            if (CampaignMinutesRemaining > 0 || Coins < MarketingCost) return false;
+            Coins -= MarketingCost;
+            CampaignMinutesRemaining = 5;
+            return true;
+        }
+
         public void SimulateMinute()
         {
-            int newVisitors = Math.Max(0, Attractions * 3 - 1);
+            bool campaignActive = CampaignMinutesRemaining > 0;
+            int newVisitors = Math.Max(0, Attractions * 3 - 1) + (campaignActive ? 4 : 0);
             Visitors = Math.Min(150, Visitors + newVisitors);
             int grossIncome = Visitors * 3;
             int operatingCosts = Attractions * 4;
             Coins = Math.Max(0, Coins + grossIncome - operatingCosts);
-            Happiness = Math.Max(30, Math.Min(100, Happiness + (Attractions >= 3 ? 1 : -1)));
+            Happiness = Math.Max(30, Math.Min(100, Happiness + (Attractions >= 3 ? 1 : -1) + (campaignActive ? 2 : 0)));
+            if (campaignActive) CampaignMinutesRemaining -= 1;
             MinutesElapsed += 1;
         }
     }
