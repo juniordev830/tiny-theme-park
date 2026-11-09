@@ -38,3 +38,7 @@ Protótipo sem sistema de salvamento, mapa editável, navegação por caminhos, 
 Quando há moedas suficientes e nenhuma campanha ativa, é possível comprar uma promoção. O custo cresce com o número de atrações (`45 + 10 × atrações` moedas), e o efeito dura **cinco minutos simulados**. Durante esse período, cada minuto recebe quatro visitantes adicionais (até o limite de capacidade atual) e um bônus de satisfação. Uma campanha ativa não pode ser comprada novamente até expirar.
 
 O núcleo `ParkEconomy.cs` permanece independente da Unity e possui testes sobre cobrança única, expiração, aumento de visitantes, felicidade e rejeição de compras sem saldo. O painel informa o custo ou o tempo restante. A execução visual da Unity ainda precisa de validação no editor para lançamento.
+
+## Relatório financeiro por minuto
+
+O painel apresenta o **saldo líquido do último minuto** (`LastMinuteNetRevenue`): receita bruta de visitantes menos custo de operação das atrações. O saldo total agora é calculado com aritmética de 64 bits e limitado ao maior inteiro suportado, evitando valores negativos por overflow quando a simulação cresce. Os cenários de limite e receita sem visitantes estão cobertos pelos testes do núcleo; não representam uma contabilidade de produção.
