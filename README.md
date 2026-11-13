@@ -33,3 +33,23 @@ O jogador recebe um terreno com área limitada e orçamento fictício. Pode colo
 - [ ] Testar build e documentar controles antes de publicar imagens como gameplay.
 
 Multiplayer, monetização e física 3D complexa não fazem parte da primeira entrega.
+
+## Primeiro incremento de código (em revisão)
+
+Grade de construção, orçamento, conexão de caminhos, capacidade, receita e manutenção diária.
+
+O arquivo `core.py` contém a implementação executável em Python 3.11+ e `tests/test_core.py` cobre regras, entradas inválidas e repetibilidade. Não há engine 3D, UI gráfica, asset ou build final nesta entrega; o protótipo é de **domínio/testes**.
+
+Para executar a demonstração:
+
+```bash
+python core.py
+```
+
+Para verificar o comportamento:
+
+```bash
+python -m unittest discover -s tests -p 'test_*.py' -v
+```
+
+O GitHub Actions executa a suíte em cada PR. A lista de tarefas do roteiro acima descreve o objetivo completo do jogo e não deve ser interpretada como pronto para publicação.
