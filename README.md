@@ -1,8 +1,8 @@
 # Tiny Theme Park
 
-Jogo de construção e administração de parque de diversões **em planejamento**, com escopo pequeno e foco em decisões compreensíveis.
+Protótipo de administração de parque de diversões com **simulação econômica em Python**. Grade, caminhos, atrações, orçamento, visitantes e manutenção já possuem implementação de domínio; a interface gráfica ainda está planejada.
 
-> **Estado atual:** documentação inicial e licença; não existe engine, interface, simulação ou versão jogável nesta branch principal.
+> **Estado da `main`:** `core.py`, testes automatizados e workflow de CI presentes. O modelo pode ser executado em linha de comando, sem engine ou versão gráfica jogável.
 
 ## Primeira experiência proposta
 
@@ -27,14 +27,14 @@ O jogador recebe um terreno com área limitada e orçamento fictício. Pode colo
 ## Roteiro de implementação
 
 - [ ] Escolher engine e definir tamanho de grade.
-- [ ] Criar classes de parque, atração e orçamento com testes.
+- [x] Criar classes de parque, atração e orçamento com testes.
 - [ ] Implementar colocação de objeto e conexão de caminhos.
 - [ ] Simular visitantes com dados fixos e HUD resumido.
 - [ ] Testar build e documentar controles antes de publicar imagens como gameplay.
 
 Multiplayer, monetização e física 3D complexa não fazem parte da primeira entrega.
 
-## Primeiro incremento de código (em revisão)
+## Primeiro incremento de código (disponível na `main`)
 
 Grade de construção, orçamento, conexão de caminhos, capacidade, receita e manutenção diária.
 
