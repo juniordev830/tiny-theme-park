@@ -1,14 +1,57 @@
 # Tiny Theme Park
 
-Jogo de construção e administração de parque de diversões **em planejamento**, com escopo pequeno e foco em decisões compreensíveis.
+## Protótipo visual em Unity
 
-> **Estado atual:** documentação inicial e licença; não existe engine, interface, simulação ou versão jogável nesta branch principal.
+**Status:** protótipo inicial em C# para **Unity 2022.3 LTS**, com cenário 3D criado automaticamente em Play Mode (sem modelos de terceiros). O núcleo de economia foi escrito sem dependências de Unity, permitindo testes automatizados.
 
-## Primeira experiência proposta
+### Abrir no Unity
+1. Abra a pasta raiz no **Unity Hub** e escolha uma instalação compatível com Unity 2022.3 LTS.
+2. Espere a importação dos scripts e abra ou crie uma cena 3D vazia.
+3. Pressione **Play**. Um bootstrap com `RuntimeInitializeOnLoadMethod` gera o parque, câmera, árvores, caminhos, atrações e visitantes animados.
+
+### Jogar
+- O parque começa com 300 moedas e uma atração.
+- O tempo de simulação avança um minuto a cada oito segundos.
+- Visitantes e receitas aumentam de acordo com o número de atrações.
+- Clique em **Construir atração** ou pressione **B** para expandir quando houver saldo.
+- Pressione **M** ou clique em **Iniciar marketing** para promover o parque por cinco minutos simulados.
+- O painel mostra moedas, visitantes, satisfação e custo de expansão.
+
+### Testes do núcleo sem Unity
+Instale .NET SDK 8 e execute:
+
+```bash
+dotnet run --project Tests/ParkEconomy.Tests.csproj --configuration Release
+```
+
+O workflow do GitHub Actions roda este teste de regras de economia. Ele **não** compila nem valida o jogo no editor Unity.
+
+### Arquivos
+- `Assets/Scripts/ParkBootstrap.cs`: construção 3D, movimentação visual e interação OnGUI.
+- `Assets/Scripts/ParkEconomy.cs`: regras de preço, visitantes e dinheiro.
+- `Tests/`: projeto de testes executável em .NET.
+
+### Limites
+Protótipo sem sistema de salvamento, mapa editável, navegação por caminhos, física detalhada, modelos finais, UI moderna ou build para distribuição. A cena é gerada em tempo de execução; a aparência precisa ser verificada no editor Unity antes de um release.
+
+
+### Campanhas de marketing (novo)
+
+Quando há moedas suficientes e nenhuma campanha ativa, é possível comprar uma promoção. O custo cresce com o número de atrações (`45 + 10 × atrações` moedas), e o efeito dura **cinco minutos simulados**. Durante esse período, cada minuto recebe quatro visitantes adicionais (até o limite de capacidade atual) e um bônus de satisfação. Uma campanha ativa não pode ser comprada novamente até expirar.
+
+O núcleo `ParkEconomy.cs` permanece independente da Unity e possui testes sobre cobrança única, expiração, aumento de visitantes, felicidade e rejeição de compras sem saldo. O painel informa o custo ou o tempo restante. A execução visual da Unity ainda precisa de validação no editor para lançamento.
+
+### Relatório financeiro por minuto
+
+O painel apresenta o **saldo líquido do último minuto** (`LastMinuteNetRevenue`): receita bruta de visitantes menos custo de operação das atrações. O saldo total agora é calculado com aritmética de 64 bits e limitado ao maior inteiro suportado, evitando valores negativos por overflow quando a simulação cresce. Os cenários de limite e receita sem visitantes estão cobertos pelos testes do núcleo; não representam uma contabilidade de produção.
+
+## Núcleo Python e planejamento
+
+### Primeira experiência proposta
 
 O jogador recebe um terreno com área limitada e orçamento fictício. Pode colocar uma atração, abrir caminhos, acompanhar visitantes simulados e conferir receitas e manutenção durante um dia de jogo.
 
-## Regras mínimas
+### Regras mínimas
 
 - Toda atração tem custo de construção e operação.
 - Construir não pode deixar orçamento negativo.
@@ -16,7 +59,7 @@ O jogador recebe um terreno com área limitada e orçamento fictício. Pode colo
 - A atração fechada não gera receita e continua sujeita às regras definidas de manutenção.
 - O avanço do tempo deve produzir os mesmos resultados com seed fixa.
 
-## Critérios de aceitação
+### Critérios de aceitação
 
 1. Colocar uma atração reduz o orçamento pelo preço exato.
 2. Um caminho desconectado não recebe visitantes.
@@ -24,7 +67,7 @@ O jogador recebe um terreno com área limitada e orçamento fictício. Pode colo
 4. O resumo diário apresenta entradas e custos sem duplicar lançamentos.
 5. O jogador consegue reiniciar o cenário sem carregar dados de sessão anterior.
 
-## Roteiro de implementação
+### Roteiro de implementação
 
 - [ ] Escolher engine e definir tamanho de grade.
 - [ ] Criar classes de parque, atração e orçamento com testes.
@@ -34,11 +77,11 @@ O jogador recebe um terreno com área limitada e orçamento fictício. Pode colo
 
 Multiplayer, monetização e física 3D complexa não fazem parte da primeira entrega.
 
-## Primeiro incremento de código (em revisão)
+### Testes do núcleo Python
 
 Grade de construção, orçamento, conexão de caminhos, capacidade, receita e manutenção diária.
 
-O arquivo `core.py` contém a implementação executável em Python 3.11+ e `tests/test_core.py` cobre regras, entradas inválidas e repetibilidade. Não há engine 3D, UI gráfica, asset ou build final nesta entrega; o protótipo é de **domínio/testes**.
+O arquivo `core.py` contém a implementação executável em Python 3.11+ e `tests/test_core.py` cobre regras, entradas inválidas e repetibilidade. O núcleo Python roda de forma independente da versão visual.
 
 Para executar a demonstração:
 
