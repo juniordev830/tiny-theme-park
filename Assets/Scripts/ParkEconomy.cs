@@ -2,6 +2,22 @@ using System;
 
 namespace TinyThemePark
 {
+    public readonly struct MinuteForecast
+    {
+        public int Visitors { get; }
+        public int NetRevenue { get; }
+        public int Balance { get; }
+        public int Happiness { get; }
+
+        public MinuteForecast(int visitors, int netRevenue, int balance, int happiness)
+        {
+            Visitors = visitors;
+            NetRevenue = netRevenue;
+            Balance = balance;
+            Happiness = happiness;
+        }
+    }
+
     /// <summary>Pure park rules, without any dependency on the Unity runtime.</summary>
     public sealed class ParkEconomy
     {
@@ -46,19 +62,29 @@ namespace TinyThemePark
             return true;
         }
 
-        public void SimulateMinute()
+        public MinuteForecast PreviewNextMinute()
         {
             bool campaignActive = CampaignMinutesRemaining > 0;
             int newVisitors = Math.Max(0, Attractions * 3 - 1) + (campaignActive ? 4 : 0);
-            Visitors = Math.Min(150, Visitors + newVisitors);
-            int grossIncome = Visitors * 3;
+            int visitors = Math.Min(150, Visitors + newVisitors);
+            int grossIncome = visitors * 3;
             int operatingCosts = Attractions * 4;
-            LastMinuteNetRevenue = grossIncome - operatingCosts;
+            int netRevenue = grossIncome - operatingCosts;
             // Calculate with long to prevent int overflow when the park has a large balance.
-            long nextBalance = (long)Coins + LastMinuteNetRevenue;
-            Coins = (int)Math.Max(0L, Math.Min(int.MaxValue, nextBalance));
-            Happiness = Math.Max(30, Math.Min(100, Happiness + (Attractions >= 3 ? 1 : -1) + (campaignActive ? 2 : 0)));
-            if (campaignActive) CampaignMinutesRemaining -= 1;
+            long nextBalance = (long)Coins + netRevenue;
+            int balance = (int)Math.Max(0L, Math.Min(int.MaxValue, nextBalance));
+            int happiness = Math.Max(30, Math.Min(100, Happiness + (Attractions >= 3 ? 1 : -1) + (campaignActive ? 2 : 0)));
+            return new MinuteForecast(visitors, netRevenue, balance, happiness);
+        }
+
+        public void SimulateMinute()
+        {
+            MinuteForecast forecast = PreviewNextMinute();
+            Visitors = forecast.Visitors;
+            LastMinuteNetRevenue = forecast.NetRevenue;
+            Coins = forecast.Balance;
+            Happiness = forecast.Happiness;
+            if (CampaignMinutesRemaining > 0) CampaignMinutesRemaining -= 1;
             if (MinutesElapsed < int.MaxValue) MinutesElapsed += 1;
         }
     }

@@ -51,4 +51,14 @@ var empty = new ParkEconomy(0, 0);
 empty.SimulateMinute();
 Check(empty.Coins == 0 && empty.LastMinuteNetRevenue == 0, "empty park has no operating revenue");
 Check(park.LastMinuteNetRevenue == park.Visitors * 3 - park.Attractions * 4, "net revenue reflects costs");
+var forecastPark = new ParkEconomy(300, 2);
+Check(forecastPark.TryLaunchCampaign(), "launch a campaign before forecasting");
+var forecast = forecastPark.PreviewNextMinute();
+Check(forecast.Visitors == 9 && forecast.NetRevenue == 19 && forecast.Balance == 254, "forecast accounts for marketing and upkeep");
+Check(forecastPark.Visitors == 0 && forecastPark.Coins == 235 && forecastPark.CampaignMinutesRemaining == 5
+    && forecastPark.MinutesElapsed == 0, "forecast does not advance simulation");
+forecastPark.SimulateMinute();
+Check(forecastPark.Visitors == forecast.Visitors && forecastPark.Coins == forecast.Balance
+    && forecastPark.Happiness == forecast.Happiness && forecastPark.LastMinuteNetRevenue == forecast.NetRevenue,
+    "forecast and simulation agree");
 Console.WriteLine("Park economy checks passed, including revenue reporting and overflow protection.");

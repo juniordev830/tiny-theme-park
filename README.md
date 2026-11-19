@@ -45,6 +45,8 @@ O núcleo `ParkEconomy.cs` permanece independente da Unity e possui testes sobre
 
 O painel apresenta o **saldo líquido do último minuto** (`LastMinuteNetRevenue`): receita bruta de visitantes menos custo de operação das atrações. O saldo total agora é calculado com aritmética de 64 bits e limitado ao maior inteiro suportado, evitando valores negativos por overflow quando a simulação cresce. Os cenários de limite e receita sem visitantes estão cobertos pelos testes do núcleo; não representam uma contabilidade de produção.
 
+A previsão do próximo minuto mostra o saldo esperado com as atrações e a campanha atuais, sem avançar a simulação.
+
 ## Núcleo Python e planejamento
 
 ### Primeira experiência proposta
