@@ -171,7 +171,8 @@ namespace TinyThemePark
         private void OnGUI()
         {
             if (economy == null) return;
-            GUI.Box(new Rect(16,16,342,310),"TINY THEME PARK — MVP");
+            var forecast = economy.PreviewNextMinute();
+            GUI.Box(new Rect(16,16,342,340),"TINY THEME PARK — MVP");
             GUI.Label(new Rect(34,49,310,25),"Moedas: " + economy.Coins);
             GUI.Label(new Rect(34,76,310,25),"Visitantes: " + economy.Visitors);
             GUI.Label(new Rect(34,103,310,25),"Atracoes: " + economy.Attractions);
@@ -181,9 +182,10 @@ namespace TinyThemePark
                 ? "Campanha ativa: " + economy.CampaignMinutesRemaining + " min"
                 : "Marketing: " + economy.MarketingCost + " moedas");
             GUI.Label(new Rect(34,210,310,25),"Saldo no ultimo minuto: " + economy.LastMinuteNetRevenue + " moedas");
-            if (GUI.Button(new Rect(34,235,300,32),"CONSTRUIR ATRACAO (B)")) TryAddAttraction();
-            if (GUI.Button(new Rect(34,273,300,32),"INICIAR MARKETING (M)")) TryLaunchMarketing();
-            GUI.Box(new Rect(16,335,342,48),notice);
+            GUI.Label(new Rect(34,235,310,25),"Próximo minuto: saldo de " + forecast.Balance + " moedas");
+            if (GUI.Button(new Rect(34,260,300,32),"CONSTRUIR ATRACAO (B)")) TryAddAttraction();
+            if (GUI.Button(new Rect(34,298,300,32),"INICIAR MARKETING (M)")) TryLaunchMarketing();
+            GUI.Box(new Rect(16,365,342,48),notice);
         }
     }
 }
