@@ -1,5 +1,7 @@
 # Tiny Theme Park
 
+**Navegação** · [Protótipo visual em Unity](#protótipo-visual-em-unity) · [Núcleo Python e planejamento](#núcleo-python-e-planejamento) · [Código e estudo](docs/ENGENHARIA_REVERSA.md)
+
 ## Protótipo visual em Unity
 
 **Status:** protótipo inicial em C# para **Unity 2022.3 LTS**, com cenário 3D criado automaticamente em Play Mode (sem modelos de terceiros). O núcleo de economia foi escrito sem dependências de Unity, permitindo testes automatizados.
@@ -98,3 +100,9 @@ python -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
 O GitHub Actions executa a suíte em cada PR. A lista de tarefas do roteiro acima descreve o objetivo completo do jogo e não deve ser interpretada como pronto para publicação.
+
+## Código e roteiro de estudo
+
+Como prever o próximo minuto mantendo a simulação atual intacta? O [guia de engenharia reversa](docs/ENGENHARIA_REVERSA.md) reúne o mapa dos módulos e uma pergunta técnica baseada no projeto.
+
+Mantido por [João Junior](https://github.com/juniordev830).
